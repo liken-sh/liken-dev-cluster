@@ -31,7 +31,7 @@ spec:
           image: hashicorp/http-echo:1.0.0
           env:
             - name: ECHO_VERSION
-              value: "v1"
+              value: "v2"
           args:
             - -listen=:5678
             - "-text=echo $(ECHO_VERSION): this answer arrived by git commit"
