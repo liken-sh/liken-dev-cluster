@@ -46,6 +46,10 @@ spec:
     # The round-trip proof: this opt-in arrived as a git commit, and
     # the fleet staged and rebooted to honor it.
     metrics-server: {}
+    # The ingress tier, also by commit: k3s deploys its bundled
+    # Traefik through a HelmChart resource, and declaring it here
+    # pulls in the helm feature that renders it.
+    traefik: {}
     flux:
       repository: ssh://git@github.com/liken-sh/liken-dev-cluster.git
       knownHosts: |

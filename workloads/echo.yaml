@@ -51,3 +51,24 @@ spec:
   ports:
     - port: 5678
       targetPort: 5678
+---
+# The ingress: Traefik routes /echo to the service. The lab reaches
+# Traefik through the API server's proxy, so the check becomes:
+#   kubectl get --raw '/api/v1/namespaces/kube-system/services/traefik:web/proxy/echo'
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: echo
+  namespace: demo
+spec:
+  ingressClassName: traefik
+  rules:
+    - http:
+        paths:
+          - path: /echo
+            pathType: Prefix
+            backend:
+              service:
+                name: echo
+                port:
+                  number: 5678
