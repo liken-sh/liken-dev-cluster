@@ -43,6 +43,9 @@ spec:
   # GitHub's published SSH host keys, public material that lets the
   # first clone verify the forge.
   features:
+    # The round-trip proof: this opt-in arrived as a git commit, and
+    # the fleet staged and rebooted to honor it.
+    metrics-server: {}
     flux:
       repository: ssh://git@github.com/liken-sh/liken-dev-cluster.git
       knownHosts: |
