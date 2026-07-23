@@ -34,7 +34,7 @@ spec:
               value: "v1"
           args:
             - -listen=:5678
-            - -text=echo $(ECHO_VERSION): this answer arrived by git commit
+            - "-text=echo $(ECHO_VERSION): this answer arrived by git commit"
           ports:
             - containerPort: 5678
 ---
