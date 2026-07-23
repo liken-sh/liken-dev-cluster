@@ -1,0 +1,48 @@
+# The demo workload: the smallest API server that can prove GitOps
+# end to end. http-echo answers every request with the -text value
+# below, so the string a curl returns exists in exactly one place,
+# this file. If the cluster serves it, the cluster got it from git.
+# Bump the version in -text and push; the Deployment spec changes,
+# the sync applies it, and the pod rolls to the new answer.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: echo
+  template:
+    metadata:
+      labels:
+        app: echo
+    spec:
+      containers:
+        - name: echo
+          image: hashicorp/http-echo:1.0.0
+          args:
+            - -listen=:5678
+            - -text=echo v1: this string arrived by git commit
+          ports:
+            - containerPort: 5678
+---
+# Reach it with no extra ports through the API server's proxy:
+#   kubectl get --raw '/api/v1/namespaces/demo/services/echo:5678/proxy/'
+apiVersion: v1
+kind: Service
+metadata:
+  name: echo
+  namespace: demo
+spec:
+  selector:
+    app: echo
+  ports:
+    - port: 5678
+      targetPort: 5678
