@@ -1,9 +1,11 @@
 # The demo workload: the smallest API server that can prove GitOps
-# end to end. http-echo answers every request with the -text value
-# below, so the string a curl returns exists in exactly one place,
-# this file. If the cluster serves it, the cluster got it from git.
-# Bump the version in -text and push; the Deployment spec changes,
-# the sync applies it, and the pod rolls to the new answer.
+# end to end. The version lives in one place, the ECHO_VERSION
+# environment variable this manifest sets, and the server answers
+# every request with it (Kubernetes expands $(ECHO_VERSION) in the
+# container args from the env). If a curl returns the string, the
+# cluster got it from git. Bump ECHO_VERSION and push; the
+# Deployment spec changes, the sync applies it, and the pod rolls
+# to the new answer.
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -27,9 +29,12 @@ spec:
       containers:
         - name: echo
           image: hashicorp/http-echo:1.0.0
+          env:
+            - name: ECHO_VERSION
+              value: "v1"
           args:
             - -listen=:5678
-            - -text=echo v1: this string arrived by git commit
+            - -text=echo $(ECHO_VERSION): this answer arrived by git commit
           ports:
             - containerPort: 5678
 ---
