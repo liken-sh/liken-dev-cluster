@@ -3,7 +3,7 @@
 The fleet repository for liken's GitOps lab: the
 [`gitops-cluster/`](https://github.com/liken-sh/liken/tree/main/gitops-cluster)
 deployment in [liken-sh/liken](https://github.com/liken-sh/liken).
-That lab boots a small QEMU fleet whose declared state lives here,
+That lab boots a small QEMU fleet whose declared state is stored here,
 so this repository's history is the drill log: each commit is an
 edit the fleet applied, or one it refused on purpose.
 
@@ -11,11 +11,11 @@ The cluster syncs this repository's root through
 [Flux](https://fluxcd.io), laid out the single-cluster way that
 [the GitOps guide](https://liken.sh/docs/guides/gitops/) describes:
 
-* `flux-system/` holds the engine, `gotk-components.yaml`. This
+* `flux-system/` contains the engine, `gotk-components.yaml`. This
   repository owns the engine: upgrade Flux by committing a new
   rendering, and add components beyond the floor the same way. The
-  cluster only plants a pinned seed copy when the engine is absent.
-* `liken/` holds the fleet's declared state: the Cluster document
+  cluster applies a pinned seed copy only when the engine is absent.
+* `liken/` contains the fleet's declared state: the Cluster document
   and one Machine document for each machine. The dev cluster's
   documents
   ([`dev-cluster/`](https://github.com/liken-sh/liken/tree/main/dev-cluster)
@@ -25,5 +25,5 @@ The cluster syncs this repository's root through
 Do not add the sync objects (`GitRepository`, `Kustomization`) here.
 liken renders them from the Cluster document's flux declaration
 ([`init/features.go`](https://github.com/liken-sh/liken/blob/main/init/features.go)
-in the main repository), and a copy in git would fight that
+in the main repository), and a copy in git would conflict with that
 rendering.

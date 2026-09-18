@@ -1,11 +1,10 @@
 # The demo workload: the smallest API server that can prove GitOps
-# end to end. The version lives in one place, the ECHO_VERSION
-# environment variable this manifest sets, and the server answers
-# every request with it (Kubernetes expands $(ECHO_VERSION) in the
-# container args from the env). If a curl returns the string, the
-# cluster got it from git. Bump ECHO_VERSION and push; the
-# Deployment spec changes, the sync applies it, and the pod rolls
-# to the new answer.
+# end to end. The version is in the ECHO_VERSION environment variable
+# this manifest sets. The server includes that value in every response
+# (Kubernetes expands $(ECHO_VERSION) in the container args from the
+# environment). If curl returns the value, the cluster applied this
+# manifest from git. Bump ECHO_VERSION and push. The Deployment spec
+# changes, Flux applies it, and the pod rolls to the new response.
 apiVersion: v1
 kind: Namespace
 metadata:
